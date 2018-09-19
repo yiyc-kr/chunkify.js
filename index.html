@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html lang= "ko">
+
+<head>
+
+<meta charset="utf-8">
+
+<title>TTS Chunkify Test</title>
+
+</head>
+
+<body>
+    
+    <textarea id="text" rows="30" cols="200"></textarea>
+    <br/>
+    <button onclick="ttsStart()">TTS</button>
+    <script src="./js/chunkify.js"></script>
+    <script>
+        function ttsStart() {
+            text = document.getElementById("text").value;
+            alert(text);
+        }        
+    </script>
+</body>
+
+</html>
