@@ -25,7 +25,7 @@
             //Select Korean Voice
             utterance.voice = voiceArr[12];
 
-            speechUtteranceChunker(utterance, {
+            ttsChunkStart(utterance, {
                 chunkLength: 100
             }, function () {                
                 console.log('done');

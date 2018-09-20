@@ -6,12 +6,16 @@
  *
  * Peter Woolley and Brett Zamir
  */
- 
+var ttsChunkStart = function (utt, settings, callback) {
+    utt.text = utt.text.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1 쩜 $2').replace(/[,()]/g, ' ');
+    speechUtteranceChunker(utt, settings, callback);
+}
+
+
 var speechUtteranceChunker = function (utt, settings, callback) {
-    settings = settings || {};
+    settings = settings || {};      
     var newUtt;
-    var txt = (settings && settings.offset !== undefined ? utt.text.substring(settings.offset) : utt.text);
-    console.log('utt.voice', utt.voice);
+    var txt = (settings && settings.offset !== undefined ? utt.text.substring(settings.offset) : utt.text);    
     console.log('settings.offset', settings.offset);
 
     if (utt.voice && utt.voice.voiceURI === 'native') { // Not part of the spec
@@ -28,8 +32,7 @@ var speechUtteranceChunker = function (utt, settings, callback) {
     }
     else {
         var chunkLength = (settings && settings.chunkLength) || 160;
-        txt = txt.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1 쩜 $2');
-        txt = txt.replace(/[,()]/g, ' ');        
+             
         var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');        
         var chunkArr = txt.match(pattRegex);
         console.log('chunkArr', chunkArr);
@@ -63,7 +66,7 @@ var speechUtteranceChunker = function (utt, settings, callback) {
     if (settings.modifier) {
         settings.modifier(newUtt);
     }
-    console.log(newUtt); //IMPORTANT!! Do not remove: Logging the object out fixes some onend firing issues.
+    console.log('newUtt', newUtt); //IMPORTANT!! Do not remove: Logging the object out fixes some onend firing issues.
     //placing the speak invocation inside a callback fixes ordering and onend issues.
     setTimeout(function () {
         speechSynthesis.speak(newUtt);
