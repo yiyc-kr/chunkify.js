@@ -17,15 +17,9 @@
     <script src="./js/chunkify.js"></script>
     <script>
         function ttsStart() {
-            var text = document.getElementById("text").value;
-            var utterance = new SpeechSynthesisUtterance(text);
-            console.log('utterance', utterance);
+            var text = document.getElementById("text").value;       
             
-            var voiceArr = speechSynthesis.getVoices();
-            //Select Korean Voice
-            utterance.voice = voiceArr[12];
-
-            ttsChunkStart(utterance, {
+            ttsChunkStart(text, {
                 chunkLength: 100
             }, function () {                
                 console.log('done');

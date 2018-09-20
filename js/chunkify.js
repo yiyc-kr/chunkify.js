@@ -6,9 +6,16 @@
  *
  * Peter Woolley and Brett Zamir
  */
-var ttsChunkStart = function (utt, settings, callback) {
-    utt.text = utt.text.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1 쩜 $2').replace(/[,()]/g, ' ');
-    speechUtteranceChunker(utt, settings, callback);
+var ttsChunkStart = function (text, settings, callback) {
+    var utterance = new SpeechSynthesisUtterance(text);
+    
+    var voiceArr = speechSynthesis.getVoices();
+    //Select Korean Voice
+    utterance.voice = voiceArr[12];
+
+    utterance.text = utterance.text.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1 쩜 $2')
+                        .replace(/[\{\}\[\]\/,;:|\)*~`^\-_+<>@\#$%&\\\=\(\'\"\s]{2,}/g, ' ');
+    speechUtteranceChunker(utterance, settings, callback);
 }
 
 
