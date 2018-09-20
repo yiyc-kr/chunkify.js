@@ -28,7 +28,8 @@ var speechUtteranceChunker = function (utt, settings, callback) {
     }
     else {
         var chunkLength = (settings && settings.chunkLength) || 160;
-        txt = txt.replace(/[,()]/g, ' ');
+        txt = txt.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1 쩜 $2');
+        txt = txt.replace(/[,()]/g, ' ');        
         var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');        
         var chunkArr = txt.match(pattRegex);
         console.log('chunkArr', chunkArr);
