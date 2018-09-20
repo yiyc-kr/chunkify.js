@@ -11,6 +11,9 @@ var speechUtteranceChunker = function (utt, settings, callback) {
     settings = settings || {};
     var newUtt;
     var txt = (settings && settings.offset !== undefined ? utt.text.substring(settings.offset) : utt.text);
+    console.log('utt.voice', utt.voice);
+    console.log('settings.offset', settings.offset);
+
     if (utt.voice && utt.voice.voiceURI === 'native') { // Not part of the spec
         newUtt = utt;
         newUtt.text = txt;
@@ -25,10 +28,12 @@ var speechUtteranceChunker = function (utt, settings, callback) {
     }
     else {
         var chunkLength = (settings && settings.chunkLength) || 160;
-        var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?,]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');
+        txt = txt.replace(/[,()]/g, ' ');
+        var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');        
         var chunkArr = txt.match(pattRegex);
+        console.log('chunkArr', chunkArr);
  
-        if (chunkArr[0] === undefined || chunkArr[0].length <= 2) {
+        if (chunkArr === null || chunkArr[0] === undefined || chunkArr[0].length <= 2) {
             //call once all text has been spoken...
             if (callback !== undefined) {
                 callback();
@@ -49,7 +54,7 @@ var speechUtteranceChunker = function (utt, settings, callback) {
                 return;
             }
             settings.offset = settings.offset || 0;
-            settings.offset += chunk.length - 1;
+            settings.offset += chunk.length;
             speechUtteranceChunker(utt, settings, callback);
         });
     }
